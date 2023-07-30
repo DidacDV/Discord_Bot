@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 #bot 29/07/2023
 
-bot_test = commands.Bot(command_prefix= '.', intents=discord.Intents.all())  #What prefix will the bot use to execute its commands + getting all intents
+bot_test = commands.Bot(command_prefix= '.!', intents=discord.Intents.all())  #What prefix will the bot use to execute its commands + getting all intents
 load_dotenv()
 token = os.getenv("TOKEN")  #GETS TOKEN FROM ENV FILE
 
@@ -15,13 +15,13 @@ async def on_ready():       #Coroutine
     print(f"Bot discord tag = {bot_test.user}")
 
 @bot_test.event
-async def on_guild_join(guild):         #WHEN BOT JOINS SERVER(GUILD)
+async def on_guild_join(guild):         #EXECUTES WHEN JOINING SERVER(GUILD)
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me):                              #LOOKS FOR CHANNEL TO PRINT WHEN JOINING
-            desc = "This is a test bot by [DidacDV](https://github.com/DidacDV)."
-            embed = discord.Embed(title= "kei_bot",color= discord.Color.blurple())
+            desc = "This is a test bot by [DidacDV](https://github.com/DidacDV)\n\nMy **prefix** for commands is **.!**\n\nType **.!help** to see all commands"
+            embed = discord.Embed(title= "Kei_bot",color= discord.Color.dark_gold())
             embed.description = desc
-            embed.set_author(name= "kei_bot", url = "https://github.com/DidacDV", icon_url="https://i.imgur.com/yucaCxs.jpeg")
+            embed.set_author(name= "Kei_bot", icon_url="https://i.imgur.com/yucaCxs.jpeg")
             await channel.send(embed = embed)
             break
 
