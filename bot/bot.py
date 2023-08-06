@@ -49,6 +49,6 @@ async def cat(ctx):        #CAT COMMAND
                 resp = await resp.json()
                 resp = resp[0]['url']
                 await ctx.send(resp)        #sends URL that appears as cat image
-                await ctx.send('Meow!')
+                await ctx.send('Meow! 😺😺😺')
 
 bot_test.run(token) 
