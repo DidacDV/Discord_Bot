@@ -19,3 +19,4 @@ It's very simple to create a new bot, not its functions, just the bot:
   ![alt text](https://github.com/DidacDV/Discord_Bot/blob/main/images/urlgen1.JPG)
   URL generated:
   ![alt text](https://github.com/DidacDV/Discord_Bot/blob/main/images/urlgen2.JPG)
+  And it's done!
