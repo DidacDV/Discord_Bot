@@ -8,6 +8,7 @@ class Music_cog(commands.Cog):
         self.playing = False
         self.paused = False
         self.songqueue = []
+        self.vc = None
         self.ytdl_format_options = {
         'format': 'bestaudio/best',
         'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -21,7 +22,7 @@ class Music_cog(commands.Cog):
         'default_search': 'auto',
         'source_address': '0.0.0.0', 
         }
-        self.ffmpeg_options = {'before options': '-reconnect 1 -reconnected_streamed 1 -reconnect_delay_max 5','options': '-vn'}
+        self.ffmpeg_options = {'options': '-vn'}
     def yt_url(self, ms):                               #SEARCHES FIRST RESULT FROM URL AT YT
         with YoutubeDL(self.ytdl_format_options) as ydl:
             try:
@@ -45,7 +46,7 @@ class Music_cog(commands.Cog):
             if self.vc == None:
                 self.vc = await self.songqueue[0][1].connect()
                 if self.vc == None:
-                    await ctx.send("Not able to conenct to voice channel")
+                    await ctx.send("Not able to conenct to voice channel 😔")
                     return 0
             else:
                 await self.vc.move_to(self.songqueue[0][1])
@@ -58,21 +59,25 @@ class Music_cog(commands.Cog):
     @commands.command(name="play", aliases=["p"])
     async def play(self, ctx, *args):
         search = " ".join(args)
-        vch = ctx.author.voice.channel
-        if vch is None:
-            await ctx.send("You have to be in a voice channel to run this command")
-        elif self.paused:
-            self.vc.resume()
-        else:
-            song = self.yt_url(search)
-            if song == False:
-                await ctx.send("Song couldn't be found, try again with other keywords")
+        if ctx.author.voice != None:
+            vch = ctx.author.voice.channel
+            if vch is None:
+                await ctx.send("You have to be in a voice channel to run this command")
+            elif self.paused:
+                self.vc.resume()
             else:
-                await ctx.send("Song has been added to the queue")
-                self.songqueue.append([song, vch])
-                
-                if self.playing == False:
-                    await self.initialize(ctx)
+                song = self.yt_url(search)
+                if song == False:
+                    await ctx.send("Song couldn't be found 😔, try again with other keywords")
+                else:
+                    await ctx.send("Song has been added to the queue")
+                    self.songqueue.append([song, vch])
+                    
+                    if self.playing == False:
+                        self.songqueue.append([song, vch])
+                        await self.initialize(ctx)
+        else:
+            await ctx.send("You have to be in a voice channel to run this command")
 
 
     @commands.command(name="pause")
@@ -94,20 +99,20 @@ class Music_cog(commands.Cog):
                 self.vc.stop()
                 await self.play(ctx)
         else:
-            await ctx.send("No song playing :(")
-    @commands.command(name="list")
+            await ctx.send("No song playing 😔")
+    @commands.command(name="list")      #prints current songs in queue
     async def list(self, ctx, *args):
         exist = False
         songs = ""
+        i = 1
         if len(self.songqueue) != 0:
             exist = True
             for song in self.songqueue:
-                songs += song[0]['title']
-                song += '\n'
+                songs += str(i) + "- " + song[0]['title'] + "\n"
         if exist:
             await ctx.send(songs)
         else:
-            await ctx.send("No songs in queue :(")
+            await ctx.send("No songs in queue 😔")
 
 async def setup(bot):
     await bot.add_cog(Music_cog(bot))
