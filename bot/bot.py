@@ -1,6 +1,7 @@
 import discord 
 import os
 import aiohttp
+from music_cog import Music_cog
 from dotenv import load_dotenv
 from discord.ext import commands
 #bot 29/07/2023
@@ -11,7 +12,8 @@ token = os.getenv("TOKEN")  #GETS TOKEN FROM ENV FILE
 
 
 @bot_test.event
-async def on_ready():       
+async def on_ready():
+    await bot_test.load_extension('music_cog')       
     print("Ready to start!")                    
     print(f"Bot discord tag = {bot_test.user}")
 
@@ -26,6 +28,19 @@ async def on_guild_join(guild):         #EXECUTES WHEN JOINING SERVER(GUILD)
             await channel.send(embed = embed)
             break
 
+
+
+
+@bot_test.command()
+async def leave(ctx):
+    status = ctx.voice_client                       #checks if user is in a voice channel
+    if status != None:
+        await ctx.guild.voice_client.disconnect()
+    else:
+        await ctx.send("You have to be in a voice channel to run this command")
+
+
+
 @bot_test.command()
 async def cat(ctx):        #CAT COMMAND
     async with aiohttp.ClientSession() as session:  #creates session
@@ -34,6 +49,6 @@ async def cat(ctx):        #CAT COMMAND
                 resp = await resp.json()
                 resp = resp[0]['url']
                 await ctx.send(resp)        #sends URL that appears as cat image
-
+                await ctx.send('Meow!')
 
 bot_test.run(token) 
