@@ -21,7 +21,7 @@ class Gif_cog(commands.Cog):
                     return resp.status
     
     @commands.command(name="gif", aliases=["gf"])
-    async def gif(self, ctx, args):
+    async def gif(self, ctx, *args):
         await ctx.send(await self.get_gif(args))
 
 
