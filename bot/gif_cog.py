@@ -1,5 +1,5 @@
 import aiohttp
-import discord
+import random
 import os
 from discord.ext import commands
 
@@ -11,17 +11,20 @@ class Gif_cog(commands.Cog):
     async def get_gif(self, search):
         async with aiohttp.ClientSession() as session:  #creates session
             key = os.getenv("API_KEY")
-            async with session.get("https://g.tenor.com/v1/search?q={}&key={}&limit=1".format(search, key)) as resp:   #gets response from tenor
+            async with session.get("https://tenor.googleapis.com/v2/search?q={}&key={}&limit=120".format(search, key)) as resp:   #gets response from tenor
                 print(resp.status)
                 if resp.status == 200:     #checks if response is correct
                     resp = await resp.json()
-                    resp = resp['results'][0]['media'][0]['gif']['url']
+                    choice = random.choice(resp['results'])
+                    resp = choice['media_formats']['gif']['url']
                     return resp
                 else:
                     return resp.status
     
     @commands.command(name="gif", aliases=["gf"])
     async def gif(self, ctx, *args):
+        if not args:
+            args = "random"
         await ctx.send(await self.get_gif(args))
 
 
