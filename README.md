@@ -17,6 +17,6 @@ Currently working on this project, mainly using the documentation for the [disco
 - `.!pause`: ⏸️If bot is in a voice channel playing music, it will pause such music.
 - `.!resume`: ▶️If a song has been paused, it resumes at the point where it was stopped.
 - `.!skip`: ⏭️If a song is playing, it will be skipped an it will pass onto the next one.
-- `list`: 📋Sends a message with all the current songs listed to play.
+- `.!list`: 📋Sends a message with all the current songs listed to play.
 #### Gif_cog
 - `.!gif [arg]`: 🖼️Sends a gif with the parameters given from user using the Tenor API. You can also use the alias `.!gf`
