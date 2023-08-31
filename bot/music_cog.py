@@ -43,7 +43,7 @@ class Music_cog(commands.Cog):
     async def initialize(self, ctx):
         if len(self.songqueue) != 0:
             ur = self.songqueue[0][0]['source']
-            if self.vc == None:
+            if self.vc == None or not self.vc.is_connected():
                 self.vc = await self.songqueue[0][1].connect()
                 if self.vc == None:
                     await ctx.send("Not able to conenct to voice channel 😔")
@@ -63,8 +63,6 @@ class Music_cog(commands.Cog):
             vch = ctx.author.voice.channel
             if vch is None:
                 await ctx.send("You have to be in a voice channel to run this command")
-            elif self.paused:
-                self.vc.resume()
             else:
                 song = self.yt_url(search)
                 if song == False:
@@ -72,9 +70,7 @@ class Music_cog(commands.Cog):
                 else:
                     await ctx.send("Song has been added to the queue")
                     self.songqueue.append([song, vch])
-                    
                     if self.playing == False:
-                        self.songqueue.append([song, vch])
                         await self.initialize(ctx)
         else:
             await ctx.send("You have to be in a voice channel to run this command")
@@ -97,7 +93,7 @@ class Music_cog(commands.Cog):
         if self.playing:
             if self.vc:
                 self.vc.stop()
-                await self.play(ctx)
+                await self.initialize(ctx)
         else:
             await ctx.send("No song playing 😔")
     @commands.command(name="list")      #prints current songs in queue
@@ -109,6 +105,7 @@ class Music_cog(commands.Cog):
             exist = True
             for song in self.songqueue:
                 songs += str(i) + "- " + song[0]['title'] + "\n"
+                i += 1
         if exist:
             await ctx.send(songs)
         else:
