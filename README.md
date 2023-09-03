@@ -9,8 +9,10 @@ Currently working on this project, mainly using the documentation for the [disco
 - Using a non blocking API call (doesn't stop the programm execution waiting for the response) with [aiohttp library](https://docs.aiohttp.org/en/stable/).
 - Using "cogs", a way to group commands and other things.
 - Using the youtube_dl library to acces youtube videos through URL or keywords and play their audio.
+- Getting latitude/altitude with geopy and using it to get the temperature on a desired city with an API.
 ---
 ## Commands
+- `.!weather [city] [days]`: Sends a table containing the temperature expected for each hour at [city] in a range of [days] from the moment the command is executed. Days argument is optional and set to 1 by default.
 - `.!cat`: 😸Sends a random cat image using the catapi.
 #### Music_cog
 - `.!play [arg]`: 🎵Joins your voice channel and plays audio of given arg from youtube. You can also use the alias `.!p`.
