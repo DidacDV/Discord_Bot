@@ -69,7 +69,7 @@ async def weather(ctx, city, *days):
             await ctx.send(longitude)
             await ctx.send(latitude)
             if not days:
-                days[0] = 7
+                days[0] = 1
             async with aiohttp.ClientSession() as session:  
                 async with session.get(f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&hourly=temperature_2m&forecast_days={days[0]}") as resp:   #gets response from catapi
                     if resp.status == 200:     
